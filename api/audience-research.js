@@ -21,6 +21,14 @@ module.exports = async (req, res) => {
   }
 
   try {
+    // Log environment variables for debugging (don't include sensitive values in production)
+    console.log('Environment:', process.env.NODE_ENV);
+    
+    // Check if API key is available
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: 'API key not configured' });
+    }
+    
     const { url, rawText } = req.body;
     
     if (!url && !rawText) {
@@ -185,7 +193,7 @@ module.exports = async (req, res) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`
+          'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
         }
       }
     );
